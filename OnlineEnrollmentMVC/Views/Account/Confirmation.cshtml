@@ -1,0 +1,71 @@
+﻿@{
+    ViewData["Title"] = "Confirmation";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Registration Successful</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a0e2e 0%, #1a1f4e 50%, #0d1537 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .confirm-card {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px;
+            padding: 48px 40px;
+            width: 100%;
+            max-width: 480px;
+            text-align: center;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        }
+        .check-icon { font-size: 64px; margin-bottom: 20px; }
+        h1 { color: #fff; font-size: 26px; font-weight: 700; margin-bottom: 12px; }
+        .subtitle { color: rgba(255,255,255,0.7); font-size: 15px; margin-bottom: 24px; }
+        .subtitle strong { color: #fff; }
+        .status-badge {
+            display: inline-block;
+            background: rgba(251,191,36,0.15);
+            border: 1px solid rgba(251,191,36,0.3);
+            color: #fbbf24;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+        .info-text { color: rgba(255,255,255,0.5); font-size: 13px; line-height: 1.6; margin-bottom: 32px; }
+        .btn-login {
+            display: inline-block;
+            padding: 14px 32px;
+            background: linear-gradient(135deg, #4f8ef7, #2563eb);
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="confirm-card">
+        <div class="check-icon">✅</div>
+        <h1>Registration Successful!</h1>
+        <p class="subtitle">Welcome, <strong>@ViewBag.FirstName</strong>! Your account has been created.</p>
+        <div class="status-badge">⏳ Pending Approval</div>
+        <p class="info-text">Your enrollment application is currently under review. Please wait for the admin to approve your account before you can proceed.</p>
+        <a href="/Account/Login" class="btn-login">Back to Login</a>
+    </div>
+</body>
+</html>

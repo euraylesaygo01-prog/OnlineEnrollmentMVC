@@ -1,0 +1,54 @@
+﻿@{
+    ViewData["Title"] = "Enrollment Success";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Enrollment Submitted</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a0e2e 0%, #1a1f4e 50%, #0d1537 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .success-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px;
+            padding: 48px 40px;
+            text-align: center;
+            max-width: 480px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        }
+        .success-icon { font-size: 64px; margin-bottom: 20px; }
+        h2 { color: #fff; font-size: 26px; font-weight: 700; margin-bottom: 12px; }
+        p { color: rgba(255,255,255,0.5); font-size: 14px; margin-bottom: 24px; }
+        .btn-back {
+            display: inline-block;
+            padding: 12px 32px;
+            background: linear-gradient(135deg, #4f8ef7, #2563eb);
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="success-card">
+        <div class="success-icon">🎉</div>
+        <h2>Enrollment Submitted!</h2>
+        <p>Your program selection has been submitted successfully. Please wait for admin approval.</p>
+        <a href="/Account/Login" class="btn-back">Back to Login</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,226 @@
+﻿@{
+    ViewData["Title"] = "My Subjects";
+    Layout = null;
+    var student = ViewBag.Student as OnlineEnrollmentMVC.Models.Student;
+    var enrollment = ViewBag.Enrollment as OnlineEnrollmentMVC.Models.Enrollment;
+    var majorSubjects = ViewBag.MajorSubjects as List<OnlineEnrollmentMVC.Models.Subject> ?? new List<OnlineEnrollmentMVC.Models.Subject>();
+    var minorSubjects = ViewBag.MinorSubjects as List<OnlineEnrollmentMVC.Models.Subject> ?? new List<OnlineEnrollmentMVC.Models.Subject>();
+    int year = ViewBag.Year ?? 1;
+    int semester = ViewBag.Semester ?? 1;
+    int totalUnits = majorSubjects.Sum(s => s.Units) + minorSubjects.Sum(s => s.Units);
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Online Enrollment - My Subjects</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a0e2e 0%, #1a1f4e 50%, #0d1537 100%);
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .top-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 16px 32px; background: rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .top-left { display: flex; align-items: center; gap: 10px; }
+        .logo-icon { font-size: 24px; }
+        .logo-text { color: #fff; font-size: 18px; font-weight: 700; }
+        .top-right { display: flex; align-items: center; gap: 12px; }
+        .student-name { color: #fff; font-size: 13px; font-weight: 600; }
+        .btn-back {
+            padding: 8px 16px; background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15); border-radius: 8px;
+            color: rgba(255,255,255,0.7); font-size: 13px; text-decoration: none;
+        }
+        .content { padding: 32px; }
+        .page-header { margin-bottom: 28px; }
+        .page-header h2 { color: #fff; font-size: 26px; font-weight: 700; margin-bottom: 6px; }
+        .page-header p { color: rgba(255,255,255,0.5); font-size: 14px; }
+        .program-badge {
+            display: inline-block; margin-top: 10px; padding: 6px 14px;
+            background: rgba(79,142,247,0.15); border: 1px solid rgba(79,142,247,0.3);
+            border-radius: 20px; color: #4f8ef7; font-size: 13px; font-weight: 600;
+        }
+        .filters { display: flex; gap: 24px; margin-bottom: 28px; flex-wrap: wrap; align-items: center; }
+        .filter-group { display: flex; gap: 8px; }
+        .filter-label { color: rgba(255,255,255,0.4); font-size: 12px; align-self: center; }
+        .filter-btn {
+            padding: 8px 18px; background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.12); border-radius: 20px;
+            color: rgba(255,255,255,0.6); font-size: 13px; text-decoration: none;
+        }
+        .filter-btn.active { background: #2563eb; border-color: #2563eb; color: #fff; font-weight: 600; }
+        .stats-row { display: flex; gap: 16px; margin-bottom: 28px; flex-wrap: wrap; }
+        .stat-card {
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 14px; padding: 18px 24px; min-width: 160px;
+        }
+        .stat-label { color: rgba(255,255,255,0.4); font-size: 12px; margin-bottom: 6px; }
+        .stat-value { color: #fff; font-size: 24px; font-weight: 700; }
+        .stat-value span { font-size: 14px; color: rgba(255,255,255,0.5); font-weight: 400; }
+        .section-title {
+            color: rgba(255,255,255,0.9); font-size: 15px; font-weight: 700;
+            margin-bottom: 14px; display: flex; align-items: center; gap: 10px;
+        }
+        .section-dot { width: 8px; height: 8px; border-radius: 50%; }
+        .dot-major { background: #4f8ef7; }
+        .dot-minor { background: #a78bfa; }
+        .section-block { margin-bottom: 32px; }
+        .subject-table {
+            width: 100%; border-collapse: collapse;
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 14px; overflow: hidden;
+        }
+        .subject-table thead tr { background: rgba(255,255,255,0.06); }
+        .subject-table th {
+            padding: 13px 20px; text-align: left; color: rgba(255,255,255,0.4);
+            font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px;
+        }
+        .subject-table td {
+            padding: 14px 20px; color: rgba(255,255,255,0.8);
+            font-size: 14px; border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        .subject-table tr:hover td { background: rgba(255,255,255,0.03); }
+        .unit-badge { display: inline-block; padding: 3px 10px; border-radius: 10px; font-size: 12px; font-weight: 600; }
+        .unit-major { background: rgba(79,142,247,0.15); color: #4f8ef7; }
+        .unit-minor { background: rgba(167,139,250,0.15); color: #a78bfa; }
+        .type-badge { padding: 3px 10px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+        .type-major { background: rgba(79,142,247,0.1); color: #4f8ef7; border: 1px solid rgba(79,142,247,0.2); }
+        .type-minor { background: rgba(167,139,250,0.1); color: #a78bfa; border: 1px solid rgba(167,139,250,0.2); }
+        .no-subjects { text-align: center; padding: 40px; color: rgba(255,255,255,0.3); font-size: 14px; }
+        .alert-warning {
+            background: rgba(251,191,36,0.1); border: 1px solid rgba(251,191,36,0.25);
+            border-radius: 14px; padding: 20px 24px; color: #fbbf24; font-size: 14px; text-align: center;
+        }
+        .alert-warning a { color: #4f8ef7; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <div class="top-left">
+            <span class="logo-icon">🎓</span>
+            <span class="logo-text">Online Enrollment</span>
+        </div>
+        <div class="top-right">
+            @if (student != null)
+            {
+                <span class="student-name">@student.FirstName @student.LastName</span>
+            }
+            <a href="/Student/Dashboard" class="btn-back">← Dashboard</a>
+            <a href="/Account/Logout" class="btn-back">Logout</a>
+        </div>
+    </div>
+
+    <div class="content">
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert-warning">
+                @ViewBag.Error — <a href="/Courses/Index?studentId=@student?.Id">Browse Programs</a>
+            </div>
+        }
+        else
+        {
+            <div class="page-header">
+                <h2>My Subjects</h2>
+                <p>View your curriculum by year level and semester</p>
+                @if (enrollment != null)
+                {
+                    <span class="program-badge">📚 @enrollment.Course.Name</span>
+                }
+            </div>
+
+            <div class="filters">
+                <span class="filter-label">Year Level:</span>
+                <div class="filter-group">
+                    @for (int y = 1; y <= 4; y++)
+                    {
+                        <a href="/Student/Subjects?year=@y&semester=@semester"
+                           class="filter-btn @(year == y ? "active" : "")">Year @y</a>
+                    }
+                </div>
+                <span class="filter-label" style="margin-left:16px">Semester:</span>
+                <div class="filter-group">
+                    <a href="/Student/Subjects?year=@year&semester=1"
+                       class="filter-btn @(semester == 1 ? "active" : "")">1st Sem</a>
+                    <a href="/Student/Subjects?year=@year&semester=2"
+                       class="filter-btn @(semester == 2 ? "active" : "")">2nd Sem</a>
+                </div>
+            </div>
+
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-label">Major Subjects</div>
+                    <div class="stat-value">@majorSubjects.Count <span>subjects</span></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Minor / GE Subjects</div>
+                    <div class="stat-value">@minorSubjects.Count <span>subjects</span></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Total Units</div>
+                    <div class="stat-value">@totalUnits <span>units</span></div>
+                </div>
+            </div>
+
+            <div class="section-block">
+                <div class="section-title">
+                    <span class="section-dot dot-major"></span> Major Subjects
+                </div>
+                @if (!majorSubjects.Any())
+                {
+                    <div class="no-subjects">No major subjects found for Year @year, Semester @semester.</div>
+                }
+                else
+                {
+                    <table class="subject-table">
+                        <thead><tr><th>#</th><th>Subject Name</th><th>Type</th><th>Units</th></tr></thead>
+                        <tbody>
+                            @for (int i = 0; i < majorSubjects.Count; i++)
+                            {
+                                <tr>
+                                    <td style="color:rgba(255,255,255,0.3)">@(i + 1)</td>
+                                    <td>@majorSubjects[i].Name</td>
+                                    <td><span class="type-badge type-major">Major</span></td>
+                                    <td><span class="unit-badge unit-major">@majorSubjects[i].Units units</span></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+
+            <div class="section-block">
+                <div class="section-title">
+                    <span class="section-dot dot-minor"></span> Minor / General Education Subjects
+                </div>
+                @if (!minorSubjects.Any())
+                {
+                    <div class="no-subjects">No minor subjects found for Year @year, Semester @semester.</div>
+                }
+                else
+                {
+                    <table class="subject-table">
+                        <thead><tr><th>#</th><th>Subject Name</th><th>Type</th><th>Units</th></tr></thead>
+                        <tbody>
+                            @for (int i = 0; i < minorSubjects.Count; i++)
+                            {
+                                <tr>
+                                    <td style="color:rgba(255,255,255,0.3)">@(i + 1)</td>
+                                    <td>@minorSubjects[i].Name</td>
+                                    <td><span class="type-badge type-minor">GE / Minor</span></td>
+                                    <td><span class="unit-badge unit-minor">@minorSubjects[i].Units units</span></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+        }
+    </div>
+</body>
+</html>
