@@ -12,7 +12,7 @@ using OnlineEnrollmentMVC.Data;
 namespace OnlineEnrollmentMVC.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260329233600_InitialCreate")]
+    [Migration("20260330002501_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace OnlineEnrollmentMVC.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.5")
+                .HasAnnotation("ProductVersion", "8.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
