@@ -12,7 +12,7 @@ using OnlineEnrollmentMVC.Data;
 namespace OnlineEnrollmentMVC.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260330003749_InitialCreate")]
+    [Migration("20260330010552_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
